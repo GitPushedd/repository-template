@@ -1,23 +1,23 @@
 const path = require("path");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
-const { watch, watchFile } = require("fs");
 
 module.exports = {
   mode: "production",
   entry: "./src/index.js",
   output: {
-    filename: "main.js",
+    filename: "main.[contenthash].js",
     path: path.resolve(__dirname, "dist"),
-    clean: true,
-  },
-  devtool: "eval-source-map",
-  devServer: {
-    watchFiles: ["./src/template.html"],
+    clean: true, // Limpia la carpeta dist antes de construir
   },
   plugins: [
     new HTMLWebpackPlugin({
       template: "./src/template.html",
       favicon: "./src/imgs/sushiLogo.png",
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true,
+      },
     }),
   ],
   module: {
@@ -35,5 +35,10 @@ module.exports = {
         loader: "html-loader",
       },
     ],
+  },
+  optimization: {
+    splitChunks: {
+      chunks: "all", // Divide el código en archivos más pequeños para mejor rendimiento
+    },
   },
 };

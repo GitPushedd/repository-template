@@ -1,44 +1,16 @@
-const path = require("path");
-const HTMLWebpackPlugin = require("html-webpack-plugin");
+const { merge } = require("webpack-merge");
+const common = require("./webpack.common.js");
 
-module.exports = {
+module.exports = merge(common, {
   mode: "development",
-  entry: "./src/index.js",
-  output: {
-    filename: "main.js",
-    path: path.resolve(__dirname, "dist"),
-    clean: true,
-  },
-  devtool: "eval-source-map", // Source maps para depuración
+  devtool: "eval-source-map",
   devServer: {
     static: {
-      directory: path.resolve(__dirname, "dist"),
+      directory: "./dist",
     },
-    watchFiles: ["./src/template.html"], // Detecta cambios en este archivo
-    hot: true, // Recarga en vivo sin refrescar la página completa
-    port: 3000, // Puedes cambiar el puerto si es necesario
-    open: true, // Abre el navegador automáticamente
+    watchFiles: ["./src/template.html"],
+    hot: true,
+    port: 3000,
+    open: true,
   },
-  plugins: [
-    new HTMLWebpackPlugin({
-      template: "./src/template.html",
-      favicon: "./src/imgs/sushiLogo.png",
-    }),
-  ],
-  module: {
-    rules: [
-      {
-        test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
-      },
-      {
-        test: /\.(png|jpe?g|gif|svg)$/i,
-        type: "asset/resource",
-      },
-      {
-        test: /\.html$/i,
-        loader: "html-loader",
-      },
-    ],
-  },
-};
+});
